@@ -41,8 +41,8 @@ def getSecondaryFollowers(api, followers_list, no_of_followers):
     secondary_followers = list()
     for follower in followers_list:
         for secondary_follower in limit_handled(
-                tweepy.Cursor(api.followers, screen_name=follower).items(no_of_followers)):
-            secondary_followers.append((secondary_follower.screen_name, follower))
+                tweepy.Cursor(api.followers, screen_name=follower[0]).items(no_of_followers)):
+            secondary_followers.append((secondary_follower.screen_name, follower[0]))
     return secondary_followers
 
 
@@ -58,8 +58,8 @@ def getFriends(api, root_user, no_of_friends):
 def getSecondaryFriends(api, friends_list, no_of_friends):
     secondary_friends = list()
     for friend in friends_list:
-        for secondary_friend in limit_handled(tweepy.Cursor(api.friends, screen_name=friend).items(no_of_friends)):
-            secondary_friends.append((friend, secondary_friend.screen_name))
+        for secondary_friend in limit_handled(tweepy.Cursor(api.friends, screen_name=friend[1]).items(no_of_friends)):
+            secondary_friends.append((friend[1], secondary_friend.screen_name))
     return secondary_friends
 
 
