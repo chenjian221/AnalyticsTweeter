@@ -30,52 +30,42 @@ def limit_handled(cursor):
 
 # Q1.b - 5 Marks
 def getFollowers(api, root_user, no_of_followers):
-    # TODO: implement the method for fetching 'no_of_followers' followers of 'root_user'
-    # rtype: list containing entries in the form of a tuple (follower, root_user)
     followers = list()
-    for follower in zip(range(no_of_followers),
-                        limit_handled(tweepy.Cursor(api.followers, screen_name=root_user).items())):
-        followers.append((follower, root_user))
+    for follower in limit_handled(tweepy.Cursor(api.followers, screen_name=root_user).items(no_of_followers)):
+        followers.append((follower.screen_name, root_user))
     return followers
 
 
 # Q1.b - 7 Marks
 def getSecondaryFollowers(api, followers_list, no_of_followers):
-    # TODO: implement the method for fetching 'no_of_followers' followers for each entry in followers_list
-    # rtype: list containing entries in the form of a tuple (follower, followers_list[i])
     secondary_followers = list()
     for follower in followers_list:
-        for secondary_follower in zip(range(no_of_followers),
-                                      limit_handled(tweepy.Cursor(api.followers, screen_name=follower).items())):
-            secondary_followers.append((secondary_follower, follower))
+        for secondary_follower in limit_handled(
+                tweepy.Cursor(api.followers, screen_name=follower).items(no_of_followers)):
+            secondary_followers.append((secondary_follower.screen_name, follower))
     return secondary_followers
 
 
 # Q1.c - 5 Marks
 def getFriends(api, root_user, no_of_friends):
-    # TODO: implement the method for fetching 'no_of_friends' friends of 'root_user'
-    # rtype: list containing entries in the form of a tuple (root_user, friend)
     friends = list()
-    for friend in zip(range(no_of_friends), limit_handled(tweepy.Cursor(api.friends, screen_name=root_user).items())):
-        friends.append((friend, root_user))
+    for friend in limit_handled(tweepy.Cursor(api.friends, screen_name=root_user).items(no_of_friends)):
+        friends.append((root_user, friend.screen_name))
     return friends
 
 
 # Q1.c - 7 Marks
 def getSecondaryFriends(api, friends_list, no_of_friends):
-    # TODO: implement the method for fetching 'no_of_friends' friends for each entry in friends_list
-    # rtype: list containing entries in the form of a tuple (friends_list[i], friend)
     secondary_friends = list()
     for friend in friends_list:
-        for secondary_friend in zip(range(no_of_friends),
-                                    limit_handled(tweepy.Cursor(api.friends, screen_name=friend).items())):
-            secondary_friends.append((friend, secondary_friend))
+        for secondary_friend in limit_handled(tweepy.Cursor(api.friends, screen_name=friend).items(no_of_friends)):
+            secondary_friends.append((friend, secondary_friend.screen_name))
     return secondary_friends
 
 
 # Q1.b, Q1.c - 6 Marks
 def writeToFile(data, output_file):
-    with open(output_file, 'wb') as csvfile:
+    with open(output_file, 'w') as csvfile:
         data_wrirwe = csv.writer(csvfile, delimiter=' ')
         for tuple in data:
             data_wrirwe.writerow(tuple)
